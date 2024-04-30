@@ -1,12 +1,12 @@
-import git
+import gitpython
 import subprocess
 import argparse
 import tempfile
 
 def clone_repo(repo_url, local_path):
-    git.Repo.clone_from(repo_url, local_path)
+    gitpython.Repo.clone_from(repo_url, local_path)
 
-def generate_setup_py(local_path, package_name, version='0.1.0', description='A Python package', author='Your Name', author_email='your.email@example.com'):
+def generate_setup_py(local_path, package_name, version, description, author, author_email):
     setup_py_content = f"""from setuptools import setup, find_packages
 
 setup(
@@ -45,12 +45,18 @@ def main():
     parser.add_argument('package_name', help='The desired package name.')
     args = parser.parse_args()
 
+    # Prompt the user for package details
+    version = input("Enter the package version (default: 0.1.0): ") or '0.1.0'
+    description = input("Enter the package description: ")
+    author = input("Enter the package author: ")
+    author_email = input("Enter the package author's email: ")
+
     # Create a temporary directory
     with tempfile.TemporaryDirectory() as temp_dir:
         # Clone the repository into the temporary directory
         clone_repo(args.repo_url, temp_dir)
         # Generate setup.py and README.md
-        generate_setup_py(temp_dir, args.package_name)
+        generate_setup_py(temp_dir, args.package_name, version, description, author, author_email)
         create_readme(temp_dir, args.package_name)
         # Package the project
         package_project(temp_dir)
