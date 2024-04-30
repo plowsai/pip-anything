@@ -1,10 +1,10 @@
-import gitpython
+import git
 import subprocess
 import argparse
 import tempfile
 
 def clone_repo(repo_url, local_path):
-    gitpython.Repo.clone_from(repo_url, local_path)
+    git.Repo.clone_from(repo_url, local_path)
 
 def generate_setup_py(local_path, package_name, version, description, author, author_email):
     setup_py_content = f"""from setuptools import setup, find_packages
